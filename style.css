@@ -110,8 +110,9 @@ body::after + svg {
 
 .intro {
   position: fixed;
-  left: -200px;
-  bottom: 10px;
+  left: -150px;
+  bottom: -50px;
   width: 1400px;
   z-index: 9999;
 }
+
