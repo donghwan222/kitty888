@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>kitty</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div class="poster">
+      <img src="fish1.png" class="fish" />
+      <img src="fish2.png" class="fish" />
+      <img src="fish3.png" class="fish" />
+      <img src="fish4.png" class="fish" />
+      <img src="fish5.png" class="fish" />
+      <img src="fish6.png" class="fish" />
+      <img src="fish7.png" class="fish" />
+      <img src="fish8.png" class="fish" />
+      <img src="fish9.png" class="fish" />
+
+      <img src="fish1.png" class="fish" />
+      <img src="fish2.png" class="fish" />
+      <img src="fish3.png" class="fish" />
+      <img src="fish4.png" class="fish" />
+      <img src="fish5.png" class="fish" />
+      <img src="fish6.png" class="fish" />
+      <img src="fish7.png" class="fish" />
+      <img src="fish8.png" class="fish" />
+      <img src="fish9.png" class="fish" />
+
+      <img src="fish1.png" class="fish" />
+      <img src="fish2.png" class="fish" />
+      <img src="fish3.png" class="fish" />
+      <img src="fish4.png" class="fish" />
+      <img src="fish5.png" class="fish" />
+      <img src="fish6.png" class="fish" />
+      <img src="fish7.png" class="fish" />
+      <img src="fish8.png" class="fish" />
+      <img src="fish9.png" class="fish" />
+
+      <img src="fish1.png" class="fish" />
+      <img src="fish2.png" class="fish" />
+      <img src="fish3.png" class="fish" />
+      <img src="fish4.png" class="fish" />
+      <img src="fish5.png" class="fish" />
+      <img src="fish6.png" class="fish" />
+      <img src="fish7.png" class="fish" />
+      <img src="fish8.png" class="fish" />
+      <img src="fish9.png" class="fish" />
+
+      <img src="fish1.png" class="fish" />
+      <img src="fish2.png" class="fish" />
+      <img src="fish3.png" class="fish" />
+      <img src="fish4.png" class="fish" />
+      <img src="fish5.png" class="fish" />
+      <img src="fish6.png" class="fish" />
+      <img src="fish7.png" class="fish" />
+      <img src="fish8.png" class="fish" />
+      <img src="fish9.png" class="fish" />
+
+      <img src="fish1.png" class="fish" />
+      <img src="fish2.png" class="fish" />
+      <img src="fish3.png" class="fish" />
+      <img src="fish4.png" class="fish" />
+      <img src="fish5.png" class="fish" />
+      <img src="fish6.png" class="fish" />
+      <img src="fish7.png" class="fish" />
+      <img src="fish8.png" class="fish" />
+      <img src="fish9.png" class="fish" />
+
+      <img src="kitty.png" class="kitty" />
+
+      <img src="w1.png" class="whale" />
+      <img src="w2.png" class="whale" />
+      <img src="w3.png" class="whale" />
+    </div>
+
+    <img src="introduce.png" class="intro" />
+
+    <!-- 물결 효과 필터 -->
+    <svg width="0" height="0">
+      <filter id="waterWave">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.015"
+          numOctaves="2"
+          seed="3"
+        >
+          <animate
+            attributeName="baseFrequency"
+            dur="15s"
+            values="0.015;0.02;0.015"
+            repeatCount="indefinite"
+          />
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="25" />
+      </filter>
+    </svg>
+
+    <script>
+      const fishes = document.querySelectorAll(".fish");
+      const kitty = document.querySelector(".kitty");
+      const whales = document.querySelectorAll(".whale");
+
+      const paddingX = 20;
+      const paddingY = 20;
+
+      function random(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const sprites = [];
+
+      let mouseX = null;
+      let mouseY = null;
+
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function initSprites() {
+        const elements = [...fishes, ...whales];
+        if (kitty) elements.push(kitty);
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        elements.forEach((el) => {
+          const isKitty = el.classList.contains("kitty");
+
+          let w = el.offsetWidth || (isKitty ? 200 : 150);
+          let h = el.offsetHeight || (isKitty ? 200 : 150);
+
+          let minY, maxY;
+          if (isKitty) {
+            // 🔥 키티는 화면 위로 완전히 나갔다가 내려올 수 있음
+            minY = -200;
+            maxY = height - h + 200;
+          } else {
+            minY = paddingY;
+            maxY = height - h - paddingY;
+          }
+
+          const maxX = width - w - paddingX;
+          const x = random(paddingX, maxX);
+          const y = random(minY, maxY);
+
+          const baseSpeed = isKitty ? random(1.5, 3) : random(0.7, 2.2);
+          const angle = Math.random() * Math.PI * 2;
+          const vx = Math.cos(angle) * baseSpeed;
+          const vy = Math.sin(angle) * baseSpeed;
+
+          sprites.push({
+            el: el,
+            isKitty: isKitty,
+            x: x,
+            y: y,
+            w: w,
+            h: h,
+            vx: vx,
+            vy: vy,
+            baseSpeed: baseSpeed,
+          });
+
+          el.style.visibility = "visible";
+        });
+      }
+
+      function updateSprites() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        sprites.forEach((s) => {
+          // 마우스 피하기
+          if (mouseX !== null && mouseY !== null) {
+            const centerX = s.x + s.w / 2;
+            const centerY = s.y + s.h / 2;
+
+            const dx = centerX - mouseX;
+            const dy = centerY - mouseY;
+            const dist = Math.hypot(dx, dy);
+
+            const threshold = s.isKitty ? 400 : 300;
+            if (dist > 0 && dist < threshold) {
+              const nx = dx / dist;
+              const ny = dy / dist;
+              const factor = (threshold - dist) / threshold;
+
+              const avoidStrength = s.isKitty ? 2.2 : 4.0;
+              s.vx += nx * avoidStrength * factor;
+              s.vy += ny * avoidStrength * factor;
+            }
+          }
+
+          // 속도 제한
+          const maxSpeed = s.isKitty ? 4.0 : 3.2;
+          let speed = Math.hypot(s.vx, s.vy);
+          if (speed > maxSpeed) {
+            s.vx = (s.vx / speed) * maxSpeed;
+            s.vy = (s.vy / speed) * maxSpeed;
+          }
+
+          // 위치 업데이트
+          s.x += s.vx;
+          s.y += s.vy;
+
+          const minX = paddingX;
+          const maxX = width - s.w - paddingX;
+
+          let minY, maxY;
+          if (s.isKitty) {
+            minY = -200; // 화면 위로 완전히 나갈 수 있는 최소값
+            maxY = height - s.h + 200; // 화면 아래 끝까지
+          } else {
+            minY = paddingY;
+            maxY = height - s.h - paddingY;
+          }
+
+          // 벽 충돌
+          if (s.x <= minX) {
+            s.x = minX;
+            s.vx = Math.abs(s.vx);
+          } else if (s.x >= maxX) {
+            s.x = maxX;
+            s.vx = -Math.abs(s.vx);
+          }
+
+          if (s.y <= minY) {
+            s.y = minY;
+            s.vy = Math.abs(s.vy);
+          } else if (s.y >= maxY) {
+            s.y = maxY;
+            s.vy = -Math.abs(s.vy);
+          }
+
+          // 원래 속도(baseSpeed)로 서서히 회복
+          const currentSpeed = Math.hypot(s.vx, s.vy);
+          const desiredSpeed = s.baseSpeed;
+          const speedDiff = desiredSpeed - currentSpeed;
+
+          if (currentSpeed > 0) {
+            s.vx += (s.vx / currentSpeed) * speedDiff * 0.02;
+            s.vy += (s.vy / currentSpeed) * speedDiff * 0.02;
+          }
+
+          const goingRight = s.vx > 0;
+          const flip = goingRight ? "rotateY(180deg)" : "rotateY(0deg)";
+          s.el.style.transform = `translate(${s.x}px, ${s.y}px) ${flip}`;
+        });
+
+        requestAnimationFrame(updateSprites);
+      }
+
+      window.addEventListener("load", () => {
+        initSprites();
+        requestAnimationFrame(updateSprites);
+      });
+
+      window.addEventListener("resize", () => {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        sprites.forEach((s) => {
+          const minX = paddingX;
+          const maxX = width - s.w - paddingX;
+
+          let minY, maxY;
+          if (s.isKitty) {
+            minY = -s.h;
+            maxY = height;
+          } else {
+            minY = paddingY;
+            maxY = height - s.h - paddingY;
+          }
+
+          if (s.x < minX) s.x = minX;
+          if (s.x > maxX) s.x = maxX;
+          if (s.y < minY) s.y = minY;
+          if (s.y > maxY) s.y = maxY;
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* 전체 화면 영역 */
+.poster {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* 화면 전체 높이 */
+  overflow: hidden; /* 화면 밖으로 나간 부분 잘라내기 */
+}
+
+/* 전체 화면 배경 */
+body {
+  background-image: url("back4.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  overflow: hidden;
+  position: relative; /* ::after 올릴 준비 */
+}
+
+/* ⭐ 위 중간 부분만 일렁이게 하는 가상 레이어 */
+body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: inherit;
+  background-position: inherit;
+  background-size: inherit;
+
+  filter: url(#waterWave);
+
+  clip-path: inset(0% 20% 80% 0%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* SVG 필터 정의 */
+body::after + svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* --------------------------------------------------- */
+/* 🌊🐟 자유롭게 돌아다니는 물고기/헬로키티/고래 */
+/* --------------------------------------------------- */
+
+.fish {
+  position: absolute;
+  width: 70px;
+  pointer-events: none;
+  z-index: 5;
+  visibility: hidden;
+  transform-origin: center center;
+}
+
+.kitty {
+  position: absolute;
+  width: 350px; /* 필요하면 300~450 사이로 조절해도 됨 */
+  pointer-events: none;
+  z-index: 5;
+  visibility: hidden;
+  transform-origin: center center;
+}
+
+.whale {
+  position: absolute;
+  width: 170px;
+  pointer-events: none;
+  z-index: 5;
+  visibility: hidden;
+  transform-origin: center center;
+}
+
+/* 예전에 쓰던 키프레임 – JS로 움직이니까 안 써도 되지만 남겨둬도 무방 */
+@keyframes swim-right {
+  0% {
+    transform: translateX(0vw) translateY(var(--start-y))
+      translate(var(--dx), var(--dy)) scaleX(-1);
+  }
+  50% {
+    transform: translateX(50vw) translateY(var(--mid-y))
+      translate(var(--dx), var(--dy)) scaleX(-1);
+  }
+  100% {
+    transform: translateX(100vw) translateY(var(--end-y))
+      translate(var(--dx), var(--dy)) scaleX(-1);
+  }
+}
+
+@keyframes swim-left {
+  0% {
+    transform: translateX(100vw) translateY(var(--start-y))
+      translate(var(--dx), var(--dy));
+  }
+  50% {
+    transform: translateX(50vw) translateY(var(--mid-y))
+      translate(var(--dx), var(--dy));
+  }
+  100% {
+    transform: translateX(0vw) translateY(var(--end-y))
+      translate(var(--dx), var(--dy));
+  }
+}
+
+.intro {
+  position: fixed;
+  left: -200px;
+  bottom: 10px;
+  width: 1400px;
+  z-index: 9999;
+}
