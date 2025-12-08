@@ -5,25 +5,23 @@ body {
   height: 100%;
 }
 
-/* 전체 화면 영역 */
 .poster {
   position: relative;
   width: 100%;
-  height: 100vh; /* 화면 전체 높이 */
-  overflow: hidden; /* 화면 밖으로 나간 부분 잘라내기 */
+  height: 100vh; 
+  overflow: hidden;
 }
 
-/* 전체 화면 배경 */
 body {
   background-image: url("back4.png");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   overflow: hidden;
-  position: relative; /* ::after 올릴 준비 */
+  position: relative; 
 }
 
-/* ⭐ 위 중간 부분만 일렁이게 하는 가상 레이어 */
+
 body::after {
   content: "";
   position: absolute;
@@ -46,10 +44,6 @@ body::after + svg {
   height: 0;
 }
 
-/* --------------------------------------------------- */
-/* 🌊🐟 자유롭게 돌아다니는 물고기/헬로키티/고래 */
-/* --------------------------------------------------- */
-
 .fish {
   position: absolute;
   width: 70px;
@@ -61,7 +55,7 @@ body::after + svg {
 
 .kitty {
   position: absolute;
-  width: 350px; /* 필요하면 300~450 사이로 조절해도 됨 */
+  width: 350px; 
   pointer-events: none;
   z-index: 5;
   visibility: hidden;
@@ -77,7 +71,6 @@ body::after + svg {
   transform-origin: center center;
 }
 
-/* 예전에 쓰던 키프레임 – JS로 움직이니까 안 써도 되지만 남겨둬도 무방 */
 @keyframes swim-right {
   0% {
     transform: translateX(0vw) translateY(var(--start-y))
@@ -115,4 +108,5 @@ body::after + svg {
   width: 1400px;
   z-index: 9999;
 }
+
 
